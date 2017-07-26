@@ -40,4 +40,21 @@ public class Iso8601TimeUtil {
         }
     }
 
+    /**
+     * Optional input for converter.
+     *
+     * @param input iso-8601 time string
+     * @return null if the input is empty, otherwise, it will be a unit timestamp
+     * @throws ParseException parse exception
+     */
+    public static String optionalConvertIso8601ToUnixTimestamp(final String input) throws ParseException {
+        if (null == input) {
+            return null;
+        } else if ("".equals(input)) {
+            return null;
+        } else {
+            return convertIso8601ToUnixTimestamp(input);
+        }
+    }
+
 }
