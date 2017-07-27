@@ -34,8 +34,7 @@ public class Iso8601TimeUtil {
      * @throws ParseException parse exception
      */
     public static String convertIso8601ToUnixTimestamp(final String iso8601) throws ParseException {
-        final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DEFAULT_DATE_FORMAT, Locale.TAIWAN);
-        simpleDateFormat.setTimeZone(DEFAULT_TIME_ZONE);
+        final SimpleDateFormat simpleDateFormat = getSimpleDateFormat(DEFAULT_DATE_FORMAT, Locale.TAIWAN, DEFAULT_TIME_ZONE);
         try {
             return String.valueOf(simpleDateFormat.parse(iso8601).getTime() / MILLISECOND);
         } catch (ParseException parseException) {
@@ -68,9 +67,8 @@ public class Iso8601TimeUtil {
      * @return ISO-8601 time string
      */
     public static String convertUnixTimestampToIso8601(final String unixTimestamp) {
-        final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DEFAULT_DATE_FORMAT, Locale.TAIWAN);
-        simpleDateFormat.setTimeZone(DEFAULT_TIME_ZONE);
-        return simpleDateFormat.format(new Date(Long.parseLong(unixTimestamp) * MILLISECOND));
+        final SimpleDateFormat simpleDateFormat = getSimpleDateFormat(DEFAULT_DATE_FORMAT, Locale.TAIWAN, DEFAULT_TIME_ZONE);
+        return parseUnixTimestampToStringByDateFormat(simpleDateFormat, unixTimestamp);
     }
 
     /**
@@ -80,9 +78,8 @@ public class Iso8601TimeUtil {
      * @return MySQL date time string
      */
     public static String convertUnixTimestampToMySqlDateTime(final String unixTimestamp) {
-        final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(MYSQL_DATE_TIME_FORMAT, Locale.CANADA);
-        simpleDateFormat.setTimeZone(DEFAULT_TIME_ZONE);
-        return simpleDateFormat.format(new Date(Long.parseLong(unixTimestamp) * MILLISECOND));
+        final SimpleDateFormat simpleDateFormat = getSimpleDateFormat(MYSQL_DATE_TIME_FORMAT, Locale.TAIWAN, DEFAULT_TIME_ZONE);
+        return parseUnixTimestampToStringByDateFormat(simpleDateFormat, unixTimestamp);
     }
 
     /**
@@ -92,6 +89,16 @@ public class Iso8601TimeUtil {
      */
     public static String getCurrentUnixTimestamp() {
         return String.valueOf(System.currentTimeMillis() / MILLISECOND);
+    }
+
+    private static SimpleDateFormat getSimpleDateFormat(String dateFormat, Locale locale, TimeZone timeZone) {
+        final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat, locale);
+        simpleDateFormat.setTimeZone(timeZone);
+        return simpleDateFormat;
+    }
+
+    private static String parseUnixTimestampToStringByDateFormat(final SimpleDateFormat simpleDateFormat, final String unixTimestamp) {
+        return simpleDateFormat.format(new Date(Long.parseLong(unixTimestamp) * MILLISECOND));
     }
 
 }
