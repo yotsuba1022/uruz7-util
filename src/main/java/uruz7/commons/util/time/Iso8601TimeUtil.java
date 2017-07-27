@@ -2,11 +2,14 @@ package uruz7.commons.util.time;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
 /**
  * @author Carl Lu
+ * <p>
+ * To get available time zone ids, please invoke TimeZone.getAvailableIDs().
  */
 public class Iso8601TimeUtil {
 
@@ -14,6 +17,7 @@ public class Iso8601TimeUtil {
     private static final TimeZone DEFAULT_TIME_ZONE = TimeZone.getTimeZone("Asia/Taipei");
     private static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssXXX";
     private static final String DEFAULT_DATE_FORMAT_WITH_MILLISECOND = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
+    private static final String MYSQL_DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
     /**
      * Constructor
@@ -23,7 +27,7 @@ public class Iso8601TimeUtil {
     }
 
     /**
-     * Convert ISO-8601 to Unix timestamp.
+     * Convert ISO-8601 to Unix timestamp, will not apply the time zone.
      *
      * @param iso8601 ISO-8601 time
      * @return String
@@ -43,7 +47,7 @@ public class Iso8601TimeUtil {
     /**
      * Optional input for converter.
      *
-     * @param input iso-8601 time string
+     * @param input ISO-8601 time string
      * @return null if the input is empty, otherwise, it will be a unit timestamp
      * @throws ParseException parse exception
      */
@@ -55,6 +59,39 @@ public class Iso8601TimeUtil {
         } else {
             return convertIso8601ToUnixTimestamp(input);
         }
+    }
+
+    /**
+     * Convert unix time to ISO8601, the result will apply the time zone.
+     *
+     * @param unixTimestamp unix timestamp
+     * @return ISO-8601 time string
+     */
+    public static String convertUnixTimestampToIso8601(final String unixTimestamp) {
+        final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DEFAULT_DATE_FORMAT, Locale.TAIWAN);
+        simpleDateFormat.setTimeZone(DEFAULT_TIME_ZONE);
+        return simpleDateFormat.format(new Date(Long.parseLong(unixTimestamp) * MILLISECOND));
+    }
+
+    /**
+     * Convert unix time to MySQL date time, the result will apply the time zone.
+     *
+     * @param unixTimestamp unix timestamp
+     * @return MySQL date time string
+     */
+    public static String convertUnixTimestampToMySqlDateTime(final String unixTimestamp) {
+        final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(MYSQL_DATE_TIME_FORMAT, Locale.CANADA);
+        simpleDateFormat.setTimeZone(DEFAULT_TIME_ZONE);
+        return simpleDateFormat.format(new Date(Long.parseLong(unixTimestamp) * MILLISECOND));
+    }
+
+    /**
+     * Get current unix timestamp
+     *
+     * @return current unix timestamp
+     */
+    public static String getCurrentUnixTimestamp() {
+        return String.valueOf(System.currentTimeMillis() / MILLISECOND);
     }
 
 }
