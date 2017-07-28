@@ -4,8 +4,7 @@ import org.junit.Test;
 
 import java.text.ParseException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 /**
  * @author Carl Lu
@@ -68,8 +67,8 @@ public class Iso8601TimeUtilTest {
 
     @Test(expected = NumberFormatException.class)
     public void testConvertUnixTimestampToIso8601WithInvalidInput() {
-        String unixTimestampInput = "Que Pa So!";
-        Iso8601TimeUtil.convertUnixTimestampToIso8601(unixTimestampInput);
+        String invalidUnixTimestampInput = "Que Pa So!";
+        Iso8601TimeUtil.convertUnixTimestampToIso8601(invalidUnixTimestampInput);
     }
 
     @Test
@@ -83,8 +82,8 @@ public class Iso8601TimeUtilTest {
 
     @Test(expected = NumberFormatException.class)
     public void testConvertUnixTimestampToMySqlDateTimeWithInvalidInput() {
-        String unixTimestampInput = "For Shizzle My Nizzle!";
-        Iso8601TimeUtil.convertUnixTimestampToMySqlDateTime(unixTimestampInput);
+        String invalidUnixTimestampInput = "For Shizzle My Nizzle!";
+        Iso8601TimeUtil.convertUnixTimestampToMySqlDateTime(invalidUnixTimestampInput);
     }
 
     @Test
@@ -92,6 +91,32 @@ public class Iso8601TimeUtilTest {
         String expected = Iso8601TimeUtil.getCurrentUnixTimestamp();
         String actual = Iso8601TimeUtil.getCurrentUnixTimestamp();
         assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testCompareThatWillGreaterThanZero() throws ParseException {
+        String earlier = "2017-07-28T13:45:00Z";
+        String later = "2017-07-28T21:45:00Z";
+        assertTrue(Iso8601TimeUtil.compare(later, earlier) > 0);
+    }
+
+    @Test
+    public void testCompareThatWillEqualsToZero() throws ParseException {
+        String same = "2017-07-28T13:45:00Z";
+        assertTrue(Iso8601TimeUtil.compare(same, same) == 0);
+    }
+
+    @Test
+    public void testCompareThatWillLessThanZeo() throws ParseException {
+        String earlier = "2017-07-28T13:45:00Z";
+        String later = "2017-07-28T21:45:00Z";
+        assertTrue(Iso8601TimeUtil.compare(earlier, later) < 0);
+    }
+
+    @Test(expected = ParseException.class)
+    public void testCompareWithInvalidInput() throws ParseException {
+        String invalidUnixTimestampInput = "For Shizzle My Nizzle!";
+        Iso8601TimeUtil.compare(invalidUnixTimestampInput, invalidUnixTimestampInput);
     }
 
 }
