@@ -10,6 +10,8 @@ import java.util.TimeZone;
  * @author Carl Lu
  * <p>
  * To get available time zone ids, please invoke TimeZone.getAvailableIDs().
+ * <p>
+ * TODO: Wrap methods so that users can pass in specified [date format]/[locale]/[time zone]
  */
 public class Iso8601TimeUtil {
 
@@ -91,13 +93,27 @@ public class Iso8601TimeUtil {
         return String.valueOf(System.currentTimeMillis() / MILLISECOND);
     }
 
+    /**
+     * Compare two iso8601 strings
+     *
+     * @param iso8601StringA input iso8601 string A
+     * @param iso8601StringB input iso8601 string B
+     * @return compared result in int format
+     * @throws ParseException
+     */
+    public static int compare(final String iso8601StringA, final String iso8601StringB) throws ParseException {
+        final SimpleDateFormat simpleDateFormat = getSimpleDateFormat(DEFAULT_DATE_FORMAT, Locale.TAIWAN, DEFAULT_TIME_ZONE);
+        return simpleDateFormat.parse(iso8601StringA).compareTo(simpleDateFormat.parse(iso8601StringB));
+    }
+
     private static SimpleDateFormat getSimpleDateFormat(String dateFormat, Locale locale, TimeZone timeZone) {
         final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat, locale);
         simpleDateFormat.setTimeZone(timeZone);
         return simpleDateFormat;
     }
 
-    private static String parseUnixTimestampToStringByDateFormat(final SimpleDateFormat simpleDateFormat, final String unixTimestamp) {
+    private static String parseUnixTimestampToStringByDateFormat(final SimpleDateFormat simpleDateFormat,
+            final String unixTimestamp) {
         return simpleDateFormat.format(new Date(Long.parseLong(unixTimestamp) * MILLISECOND));
     }
 
