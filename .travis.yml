@@ -1,0 +1,19 @@
+language: java
+
+notifications:
+  email: false
+  slack:
+    on_success: always
+    on_failure: always
+    secure: EvWBEd5fQ9almYx1wevvfGzdpQgmYucQIebok2wIFjfWAg+zNRs8//xkeQl/R/DC2kDg5qPiOk8lwftGgaDe/jV3q7dTCELuBCA/65Hct98pyF8JsZM9zsZPYQ4buSBcPNPv3n9RpUur+e7WiIX5R77Dq/G9klvRdbPrZDsDKpiEzguoBZmmCZkP3NmN2VQOjtO4UnXvfLSxLaH6+wc0rZl/z9Qm2BXOTUmOMobjREMS1PHJEOUZ4huoCBXHcT6emUiLCbNDwKLjTChx8f88jM8vIZzsGb3WZMqVPYs7ixskn/Ijf9JFUG+v8QAD/25TSFBryV7wqvdSM/DAhI0JL6sldNSZbeaceZtByEYfL3m410jHSjN/cFWsAiKSISnFxvlZquIHBiSbz4nBnx2ZdQviAT9Z+r4CrwCr+vdVVkwkYVX76/7UrQmsfCz5n9uqboXFGcS8neikavD+rJTgrH+U7d3zkfK9PdfgSlauazt9I8BOiAezz5/P3vnkfL6dnOrs74Rgdn+XJ29Qsx2tzGGBWFgiKwnw2m0PSdMpZP1qDxk5+jAwxDl7E3RS+sQEaBn/Wb8gm6qrS8YsKAmHhpaFiirco+ovOcch4u29XoeRwYSA8GKQHvCFhOmGWA5cm4mXIEOPpF8lvinS7x9EB9kJZhSwICCEIBaCVqog098=
+
+sudo: false
+
+jdk:
+  - oraclejdk8
+
+branches:
+  only:
+    - master
+
+script: mvn clean test pmd:check verify
