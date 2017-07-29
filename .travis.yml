@@ -16,4 +16,11 @@ branches:
   only:
     - master
 
-script: mvn clean test pmd:check verify
+script:
+    - mvn clean test pmd:check verify cobertura:cobertura
+
+before_install:
+  - pip install --user codecov
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
