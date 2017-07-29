@@ -63,6 +63,7 @@
                     <minimumTokens>20</minimumTokens>
                     <format>xml</format>
                     <failOnViolation>true</failOnViolation>
+                    <linkXRef>false</linkXRef>
                 </configuration>
                 <executions>
                     <execution>
