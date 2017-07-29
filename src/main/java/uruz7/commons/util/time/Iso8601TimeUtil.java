@@ -13,7 +13,7 @@ import java.util.TimeZone;
  * <p>
  * TODO: Wrap methods so that users can pass in specified [date format]/[locale]/[time zone]
  */
-public class Iso8601TimeUtil {
+public final class Iso8601TimeUtil {
 
     private static final long MILLISECOND = 1000L;
     private static final TimeZone DEFAULT_TIME_ZONE = TimeZone.getTimeZone("Asia/Taipei");
@@ -25,7 +25,7 @@ public class Iso8601TimeUtil {
      * Constructor
      */
     private Iso8601TimeUtil() {
-
+        throw new UnsupportedOperationException();
     }
 
     /**
@@ -104,6 +104,18 @@ public class Iso8601TimeUtil {
     public static int compare(final String iso8601StringA, final String iso8601StringB) throws ParseException {
         final SimpleDateFormat simpleDateFormat = getSimpleDateFormat(DEFAULT_DATE_FORMAT, Locale.TAIWAN, DEFAULT_TIME_ZONE);
         return simpleDateFormat.parse(iso8601StringA).compareTo(simpleDateFormat.parse(iso8601StringB));
+    }
+
+    /**
+     * Convert unix timestamp to custom format
+     *
+     * @param unixTimestamp input unix timestamp
+     * @param customFormat  custom timestamp format
+     * @return timestamp in custom format
+     */
+    public static String convertUnixTimestampToCustomFormat(final String unixTimestamp, final String customFormat) {
+        final SimpleDateFormat simpleDateFormat = getSimpleDateFormat(customFormat, Locale.TAIWAN, DEFAULT_TIME_ZONE);
+        return parseUnixTimestampToStringByDateFormat(simpleDateFormat, unixTimestamp);
     }
 
     private static SimpleDateFormat getSimpleDateFormat(String dateFormat, Locale locale, TimeZone timeZone) {

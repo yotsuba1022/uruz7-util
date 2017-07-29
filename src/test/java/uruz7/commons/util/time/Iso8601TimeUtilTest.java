@@ -2,6 +2,8 @@ package uruz7.commons.util.time;
 
 import org.junit.Test;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 
 import static org.junit.Assert.*;
@@ -10,6 +12,14 @@ import static org.junit.Assert.*;
  * @author Carl Lu
  */
 public class Iso8601TimeUtilTest {
+
+    @Test(expected = InvocationTargetException.class)
+    public void testPrivateConstructor()
+            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        Constructor<Iso8601TimeUtil> constructor = Iso8601TimeUtil.class.getDeclaredConstructor();
+        constructor.setAccessible(true);
+        constructor.newInstance();
+    }
 
     @Test
     public void testConvertIso8601ToUnixTimestamp() throws ParseException {
@@ -117,6 +127,22 @@ public class Iso8601TimeUtilTest {
     public void testCompareWithInvalidInput() throws ParseException {
         String invalidUnixTimestampInput = "For Shizzle My Nizzle!";
         Iso8601TimeUtil.compare(invalidUnixTimestampInput, invalidUnixTimestampInput);
+    }
+
+    @Test
+    public void testConvertUnixTimestampToCustomFormat() {
+        String unixTimestamp = "1501307211";
+        String customFormat = "yyyy-MM-dd HH:mmXXX";
+        String expected = "2017-07-29 13:46+08:00";
+        String actual = Iso8601TimeUtil.convertUnixTimestampToCustomFormat(unixTimestamp, customFormat);
+        assertEquals(expected, actual);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testConvertUnixTimestampToCustomFormatWithInvalidFormat() {
+        String unixTimestamp = "1501307211";
+        String customFormat = "yyMMdd que pa so";
+        Iso8601TimeUtil.convertUnixTimestampToCustomFormat(unixTimestamp, customFormat);
     }
 
 }
