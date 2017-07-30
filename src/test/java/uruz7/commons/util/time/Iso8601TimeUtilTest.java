@@ -5,6 +5,8 @@ import org.junit.Test;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import static org.junit.Assert.*;
 
@@ -42,6 +44,16 @@ public class Iso8601TimeUtilTest {
     public void testConvertIso8601ToUnixTimestampWithParseException() throws ParseException {
         String invalidIso8601Input = "2017-07-2523:25:51Z";
         Iso8601TimeUtil.convertIso8601ToUnixTimestamp(invalidIso8601Input);
+    }
+
+    @Test
+    public void testConvertIso8601ToUnixTimestampWithSpecifiedParams() throws ParseException {
+        String iso8601 = "2017-07-30T03Z";
+        String dateFormat = "yyyy-MM-dd'T'HHXXX";
+        String expected = "1501383600";
+        String actual = Iso8601TimeUtil.convertIso8601ToUnixTimestamp(iso8601, dateFormat, Locale.CANADA,
+                TimeZone.getTimeZone("Canada/Pacific"));
+        assertEquals(expected, actual);
     }
 
     @Test

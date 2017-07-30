@@ -11,7 +11,6 @@ import java.util.TimeZone;
  * <p>
  * To get available time zone ids, please invoke TimeZone.getAvailableIDs().
  * <p>
- * TODO: Wrap methods so that users can pass in specified [date format]/[locale]/[time zone]
  */
 public final class Iso8601TimeUtil {
 
@@ -29,18 +28,34 @@ public final class Iso8601TimeUtil {
     }
 
     /**
-     * Convert ISO-8601 to Unix timestamp, will not apply the time zone.
+     * Convert ISO-8601 to Unix timestamp, will not affected by the time zone.
+     * Notice that the input timestamp should match the date time format, the default format is: yyyy-MM-dd'T'HH:mm:ssXXX
      *
      * @param iso8601 ISO-8601 time
-     * @return String
+     * @return unix timestamp string
      * @throws ParseException parse exception
      */
     public static String convertIso8601ToUnixTimestamp(final String iso8601) throws ParseException {
-        final SimpleDateFormat simpleDateFormat = getSimpleDateFormat(DEFAULT_DATE_FORMAT, Locale.TAIWAN, DEFAULT_TIME_ZONE);
+        return convertIso8601ToUnixTimestamp(iso8601, DEFAULT_DATE_FORMAT, Locale.TAIWAN, DEFAULT_TIME_ZONE);
+    }
+
+    /**
+     * Convert ISO-8601 to Unix timestamp with specified parameters, will not affected by the time zone.
+     *
+     * @param iso8601    ISO-8601 time
+     * @param dateFormat specific date format
+     * @param locale     specific local
+     * @param timeZone   specific time zone
+     * @return unix timestamp string
+     * @throws ParseException parse exception
+     */
+    public static String convertIso8601ToUnixTimestamp(final String iso8601, final String dateFormat, final Locale locale,
+            final TimeZone timeZone) throws ParseException {
+        final SimpleDateFormat simpleDateFormat = getSimpleDateFormat(dateFormat, locale, timeZone);
         try {
             return String.valueOf(simpleDateFormat.parse(iso8601).getTime() / MILLISECOND);
         } catch (ParseException parseException) {
-            final SimpleDateFormat formatWithMs = new SimpleDateFormat(DEFAULT_DATE_FORMAT_WITH_MILLISECOND, Locale.TAIWAN);
+            final SimpleDateFormat formatWithMs = new SimpleDateFormat(DEFAULT_DATE_FORMAT_WITH_MILLISECOND, locale);
             return String.valueOf(formatWithMs.parse(iso8601).getTime() / MILLISECOND);
         }
     }
@@ -48,44 +63,86 @@ public final class Iso8601TimeUtil {
     /**
      * Optional input for converter.
      *
-     * @param input ISO-8601 time string
-     * @return null if the input is empty, otherwise, it will be a unit timestamp
+     * @param iso8601 ISO-8601 time string
+     * @return null if the iso8601 input is empty, otherwise, it will be a unit timestamp
      * @throws ParseException parse exception
      */
-    public static String optionalConvertIso8601ToUnixTimestamp(final String input) throws ParseException {
-        if (null == input) {
+    public static String optionalConvertIso8601ToUnixTimestamp(final String iso8601) throws ParseException {
+        return optionalConvertIso8601ToUnixTimestamp(iso8601, DEFAULT_DATE_FORMAT, Locale.TAIWAN, DEFAULT_TIME_ZONE);
+    }
+
+    /**
+     * Optional input for converter with specified parameters.
+     *
+     * @param iso8601    ISO-8601 time
+     * @param dateFormat specific date format
+     * @param locale     specific local
+     * @param timeZone   specific time zone
+     * @return null if the iso8601 input is empty, otherwise, it will be a unit timestamp
+     * @throws ParseException parse exception
+     */
+    public static String optionalConvertIso8601ToUnixTimestamp(final String iso8601, final String dateFormat, final Locale locale,
+            final TimeZone timeZone) throws ParseException {
+        if (null == iso8601) {
             return null;
-        } else if ("".equals(input)) {
+        } else if ("".equals(iso8601)) {
             return null;
         } else {
-            return convertIso8601ToUnixTimestamp(input);
+            return convertIso8601ToUnixTimestamp(iso8601, dateFormat, locale, timeZone);
         }
     }
 
     /**
-     * Convert unix time to ISO8601, the result will apply the time zone.
+     * Convert unix time to ISO8601, the result will affected by the time zone.
      *
      * @param unixTimestamp unix timestamp
      * @return ISO-8601 time string
      */
     public static String convertUnixTimestampToIso8601(final String unixTimestamp) {
-        final SimpleDateFormat simpleDateFormat = getSimpleDateFormat(DEFAULT_DATE_FORMAT, Locale.TAIWAN, DEFAULT_TIME_ZONE);
+        return convertUnixTimestampToIso8601(unixTimestamp, DEFAULT_DATE_FORMAT, Locale.TAIWAN, DEFAULT_TIME_ZONE);
+    }
+
+    /**
+     * Convert unix time to ISO8601 with specified parameters, the result will affected by the time zone.
+     *
+     * @param unixTimestamp unix timestamp
+     * @param dateFormat    specific date format
+     * @param locale        specific local
+     * @param timeZone      specific time zone
+     * @return ISO-8601 time string
+     */
+    public static String convertUnixTimestampToIso8601(final String unixTimestamp, final String dateFormat, final Locale locale,
+            final TimeZone timeZone) {
+        final SimpleDateFormat simpleDateFormat = getSimpleDateFormat(dateFormat, locale, timeZone);
         return parseUnixTimestampToStringByDateFormat(simpleDateFormat, unixTimestamp);
     }
 
     /**
-     * Convert unix time to MySQL date time, the result will apply the time zone.
+     * Convert unix time to MySQL date time, the result will affected by the time zone.
      *
      * @param unixTimestamp unix timestamp
      * @return MySQL date time string
      */
     public static String convertUnixTimestampToMySqlDateTime(final String unixTimestamp) {
-        final SimpleDateFormat simpleDateFormat = getSimpleDateFormat(MYSQL_DATE_TIME_FORMAT, Locale.TAIWAN, DEFAULT_TIME_ZONE);
+        return convertUnixTimestampToMySqlDateTime(unixTimestamp, Locale.TAIWAN, DEFAULT_TIME_ZONE);
+    }
+
+    /**
+     * Convert unix time to MySQL date time with specified parameters, the result will affected by the time zone.
+     *
+     * @param unixTimestamp unix timestamp
+     * @param locale        specific local
+     * @param timeZone      specific time zone
+     * @return MySQL date time string
+     */
+    public static String convertUnixTimestampToMySqlDateTime(final String unixTimestamp, final Locale locale,
+            final TimeZone timeZone) {
+        final SimpleDateFormat simpleDateFormat = getSimpleDateFormat(MYSQL_DATE_TIME_FORMAT, locale, timeZone);
         return parseUnixTimestampToStringByDateFormat(simpleDateFormat, unixTimestamp);
     }
 
     /**
-     * Get current unix timestamp
+     * Get current unix timestamp.
      *
      * @return current unix timestamp
      */
@@ -94,7 +151,7 @@ public final class Iso8601TimeUtil {
     }
 
     /**
-     * Compare two iso8601 strings
+     * Compare two iso8601 strings.
      *
      * @param iso8601StringA input iso8601 string A
      * @param iso8601StringB input iso8601 string B
@@ -107,14 +164,28 @@ public final class Iso8601TimeUtil {
     }
 
     /**
-     * Convert unix timestamp to custom format
+     * Convert unix timestamp to custom format.
      *
      * @param unixTimestamp input unix timestamp
      * @param customFormat  custom timestamp format
      * @return timestamp in custom format
      */
     public static String convertUnixTimestampToCustomFormat(final String unixTimestamp, final String customFormat) {
-        final SimpleDateFormat simpleDateFormat = getSimpleDateFormat(customFormat, Locale.TAIWAN, DEFAULT_TIME_ZONE);
+        return convertUnixTimestampToCustomFormat(unixTimestamp, customFormat, Locale.TAIWAN, DEFAULT_TIME_ZONE);
+    }
+
+    /**
+     * Convert unix timestamp to custom format with specified parameters.
+     *
+     * @param unixTimestamp input unix timestamp
+     * @param customFormat  specific date format
+     * @param locale        specific local
+     * @param timeZone      specific time zone
+     * @return timestamp in custom format
+     */
+    public static String convertUnixTimestampToCustomFormat(final String unixTimestamp, final String customFormat,
+            final Locale locale, final TimeZone timeZone) {
+        final SimpleDateFormat simpleDateFormat = getSimpleDateFormat(customFormat, locale, timeZone);
         return parseUnixTimestampToStringByDateFormat(simpleDateFormat, unixTimestamp);
     }
 
