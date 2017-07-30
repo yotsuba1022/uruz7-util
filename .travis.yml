@@ -17,7 +17,7 @@ branches:
     - master
 
 script:
-    - mvn clean test pmd:check verify cobertura:cobertura
+    - mvn clean test pmd:check cobertura:cobertura
 
 before_install:
   - pip install --user codecov
