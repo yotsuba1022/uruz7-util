@@ -22,6 +22,8 @@ public class JdkIso8601TimeUtil {
     }
 
     /**
+     * Convert ISO-8601 to Unix timestamp.
+     *
      * @param iso8601 ISO-8601 time
      * @return unix timestamp string
      */
@@ -31,6 +33,8 @@ public class JdkIso8601TimeUtil {
     }
 
     /**
+     * Optional input for converter.
+     *
      * @param iso8601 ISO-8601 time
      * @return unix timestamp string
      */
@@ -45,6 +49,8 @@ public class JdkIso8601TimeUtil {
     }
 
     /**
+     * Convert unix time to ISO8601, the result will affected by the time zone.
+     *
      * @param unixTimestamp unix timestamp
      * @return ISO-8601 time string
      */
@@ -53,6 +59,8 @@ public class JdkIso8601TimeUtil {
     }
 
     /**
+     * Convert unix time to ISO8601 with specified zone id, the result will affected by the time zone.
+     *
      * @param unixTimestamp unix timestamp
      * @param zoneId        zone id
      * @return ISO-8601 time string
@@ -63,6 +71,8 @@ public class JdkIso8601TimeUtil {
     }
 
     /**
+     * Convert unix time to MySQL date time, the result will affected by the time zone.
+     *
      * @param unixTimestamp unix timestamp
      * @return MySQL date time string
      */
@@ -71,6 +81,8 @@ public class JdkIso8601TimeUtil {
     }
 
     /**
+     * Convert unix time to MySQL date time with specified zone id, the result will affected by the time zone.
+     *
      * @param unixTimestamp unix timestamp
      * @param zoneId        zone id
      * @return MySQL date time string
@@ -81,6 +93,8 @@ public class JdkIso8601TimeUtil {
     }
 
     /**
+     * Get current unix timestamp.
+     *
      * @return current unix timestamp
      */
     public static String getCurrentUnixTimestamp() {
@@ -88,6 +102,8 @@ public class JdkIso8601TimeUtil {
     }
 
     /**
+     * Compare two iso8601 strings.
+     *
      * @param iso8601StringA input iso8601 string A
      * @param iso8601StringB input iso8601 string B
      * @return compared result in int format

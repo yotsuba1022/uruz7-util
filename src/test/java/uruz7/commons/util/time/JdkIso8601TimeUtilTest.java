@@ -4,7 +4,6 @@ import org.junit.Test;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.time.ZoneId;
 import java.time.format.DateTimeParseException;
 
 import static org.junit.Assert.*;
@@ -71,14 +70,14 @@ public class JdkIso8601TimeUtilTest {
         // Which means: 2017-07-27T15:41:00Z
         String unixTimestampInput = "1501170060";
         String expected = "2017-07-27T23:41:00+08:00";
-        String actual = JdkIso8601TimeUtil.convertUnixTimestampToIso8601(unixTimestampInput, ZoneId.of("Asia/Taipei"));
+        String actual = JdkIso8601TimeUtil.convertUnixTimestampToIso8601(unixTimestampInput);
         assertEquals(expected, actual);
     }
 
     @Test(expected = NumberFormatException.class)
     public void testConvertUnixTimestampToIso8601WithInvalidInput() {
         String invalidUnixTimestampInput = "Que Pa So!";
-        JdkIso8601TimeUtil.convertUnixTimestampToIso8601(invalidUnixTimestampInput, ZoneId.of("Asia/Taipei"));
+        JdkIso8601TimeUtil.convertUnixTimestampToIso8601(invalidUnixTimestampInput);
     }
 
     @Test
@@ -86,14 +85,14 @@ public class JdkIso8601TimeUtilTest {
         // Which means: 2017-07-27T15:41:00Z
         String unixTimestampInput = "1501170060";
         String expected = "2017-07-27 23:41:00";
-        String actual = JdkIso8601TimeUtil.convertUnixTimestampToMySqlDateTime(unixTimestampInput, ZoneId.of("Asia/Taipei"));
+        String actual = JdkIso8601TimeUtil.convertUnixTimestampToMySqlDateTime(unixTimestampInput);
         assertEquals(expected, actual);
     }
 
     @Test(expected = NumberFormatException.class)
     public void testConvertUnixTimestampToMySqlDateTimeWithInvalidInput() {
         String invalidUnixTimestampInput = "For Shizzle My Nizzle!";
-        JdkIso8601TimeUtil.convertUnixTimestampToMySqlDateTime(invalidUnixTimestampInput, ZoneId.of("Asia/Taipei"));
+        JdkIso8601TimeUtil.convertUnixTimestampToMySqlDateTime(invalidUnixTimestampInput);
     }
 
     @Test
