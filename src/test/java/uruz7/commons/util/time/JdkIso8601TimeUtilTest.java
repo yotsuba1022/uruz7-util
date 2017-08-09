@@ -127,4 +127,25 @@ public class JdkIso8601TimeUtilTest {
         String invalidUnixTimestampInput = "For Shizzle My Nizzle!";
         JdkIso8601TimeUtil.compare(invalidUnixTimestampInput, invalidUnixTimestampInput);
     }
+
+    @Test
+    public void testShiftTimeZoneForIso8601Timestamp() {
+        String input = "2017-08-08T16:00:00Z";
+        String expected = "2017-08-09T00:00:00+08:00";
+        String actual = JdkIso8601TimeUtil.shiftTimeZoneForIso8601Timestamp(input);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testShiftTimeZoneForIso8601TimestampWithEmptyInput() {
+        String input = "";
+        String actual = JdkIso8601TimeUtil.shiftTimeZoneForIso8601Timestamp(input);
+        assertNull(actual);
+    }
+
+    @Test
+    public void testShiftTimeZoneForIso8601TimestampWithNullInput() {
+        String actual = JdkIso8601TimeUtil.shiftTimeZoneForIso8601Timestamp(null);
+        assertNull(actual);
+    }
 }

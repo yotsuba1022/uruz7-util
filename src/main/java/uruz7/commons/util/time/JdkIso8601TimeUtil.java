@@ -17,7 +17,7 @@ public class JdkIso8601TimeUtil {
     /**
      * Constructor
      */
-    public JdkIso8601TimeUtil() {
+    private JdkIso8601TimeUtil() {
         throw new UnsupportedOperationException();
     }
 
@@ -45,6 +45,24 @@ public class JdkIso8601TimeUtil {
             return null;
         } else {
             return convertIso8601ToUnixTimestamp(iso8601);
+        }
+    }
+
+    /**
+     * Optional input for converter.
+     *
+     * @param unixTimestamp unix timestamp
+     * @param zoneId        zone id
+     * @return ISO-8601 time string
+     */
+    public static String optionalConvertUnixTimestampToIso8601(final String unixTimestamp, final ZoneId zoneId) {
+        if (null == unixTimestamp) {
+            return null;
+        } else if ("".equals(unixTimestamp)) {
+            return null;
+        } else {
+            Instant instant = Instant.ofEpochSecond(Long.valueOf(unixTimestamp));
+            return getDateTimeFormatter(DEFAULT_DATE_FORMAT).format(instant.atZone(zoneId));
         }
     }
 
@@ -90,6 +108,27 @@ public class JdkIso8601TimeUtil {
     public static String convertUnixTimestampToMySqlDateTime(final String unixTimestamp, ZoneId zoneId) {
         Instant instant = Instant.ofEpochSecond(Long.valueOf(unixTimestamp));
         return getDateTimeFormatter(MYSQL_DATE_TIME_FORMAT).format(instant.atZone(zoneId));
+    }
+
+    /**
+     * Shift the time zone of the timestamp to UTC+8
+     *
+     * @param iso8601 ISO-8601 time string
+     * @return ISO-8601 time string
+     */
+    public static String shiftTimeZoneForIso8601Timestamp(final String iso8601) {
+        return shiftTimeZoneForIso8601Timestamp(iso8601, DEFAULT_ZONE_ID);
+    }
+
+    /**
+     * Shift the time zone of the timestamp to specified time zone
+     *
+     * @param iso8601 ISO-8601 time string
+     * @param zoneId  zone id
+     * @return ISO-8601 time string
+     */
+    public static String shiftTimeZoneForIso8601Timestamp(final String iso8601, final ZoneId zoneId) {
+        return optionalConvertUnixTimestampToIso8601(optionalConvertIso8601ToUnixTimestamp(iso8601), zoneId);
     }
 
     /**
