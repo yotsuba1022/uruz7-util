@@ -58,8 +58,6 @@ public class JdkIso8601TimeUtil {
     public static String optionalConvertUnixTimestampToIso8601(final String unixTimestamp, final ZoneId zoneId) {
         if (null == unixTimestamp) {
             return null;
-        } else if ("".equals(unixTimestamp)) {
-            return null;
         } else {
             Instant instant = Instant.ofEpochSecond(Long.valueOf(unixTimestamp));
             return getDateTimeFormatter(DEFAULT_DATE_FORMAT).format(instant.atZone(zoneId));
