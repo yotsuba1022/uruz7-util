@@ -122,6 +122,12 @@ public class JdkIso8601TimeUtilTest {
         assertTrue(JdkIso8601TimeUtil.compare(earlier, later) < 0);
     }
 
+    @Test(expected = DateTimeParseException.class)
+    public void testCompareWithInvalidInput() {
+        String invalidUnixTimestampInput = "For Shizzle My Nizzle!";
+        JdkIso8601TimeUtil.compare(invalidUnixTimestampInput, invalidUnixTimestampInput);
+    }
+
     @Test
     public void testCompareLocalIso8601ThatWillGreaterThanZero() {
         String earlier = "2017-08-08T13:45:00+08:00";
@@ -143,9 +149,9 @@ public class JdkIso8601TimeUtilTest {
     }
 
     @Test(expected = DateTimeParseException.class)
-    public void testCompareWithInvalidInput() {
+    public void testCompareLocalIso8601WithInvalidInput() {
         String invalidUnixTimestampInput = "For Shizzle My Nizzle!";
-        JdkIso8601TimeUtil.compare(invalidUnixTimestampInput, invalidUnixTimestampInput);
+        JdkIso8601TimeUtil.compareLocalIso8601(invalidUnixTimestampInput, invalidUnixTimestampInput);
     }
 
     @Test
