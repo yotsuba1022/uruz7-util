@@ -1,6 +1,7 @@
 package uruz7.commons.util.time;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
@@ -149,6 +150,20 @@ public class JdkIso8601TimeUtil {
         Instant instantA = Instant.ofEpochSecond(Long.valueOf(convertIso8601ToUnixTimestamp(iso8601StringA)));
         Instant instantB = Instant.ofEpochSecond(Long.valueOf(convertIso8601ToUnixTimestamp(iso8601StringB)));
         return instantA.compareTo(instantB);
+    }
+
+    /**
+     * Compare two local iso8601 strings.
+     *
+     * @param localIso8601        input iso8601 string
+     * @param anotherLocalIso8601 another input iso8601 string
+     * @return compared result in int format
+     */
+    public static int compareLocalIso8601(final String localIso8601, final String anotherLocalIso8601) {
+        DateTimeFormatter formatter = getDateTimeFormatter(DEFAULT_DATE_FORMAT);
+        LocalDateTime localDateTime1 = LocalDateTime.parse(localIso8601, formatter);
+        LocalDateTime localDateTime2 = LocalDateTime.parse(anotherLocalIso8601, formatter);
+        return localDateTime1.compareTo(localDateTime2);
     }
 
     private static DateTimeFormatter getDateTimeFormatter(String dateTimeFormat) {
