@@ -155,14 +155,14 @@ public class JdkIso8601TimeUtil {
     /**
      * Compare two local iso8601 strings.
      *
-     * @param localIso8601        input iso8601 string
-     * @param anotherLocalIso8601 another input iso8601 string
+     * @param localIso8601A input iso8601 string A
+     * @param localIso8601B input iso8601 string B
      * @return compared result in int format
      */
-    public static int compareLocalIso8601(final String localIso8601, final String anotherLocalIso8601) {
+    public static int compareLocalIso8601(final String localIso8601A, final String localIso8601B) {
         DateTimeFormatter formatter = getDateTimeFormatter(DEFAULT_DATE_FORMAT);
-        LocalDateTime localDateTime1 = LocalDateTime.parse(localIso8601, formatter);
-        LocalDateTime localDateTime2 = LocalDateTime.parse(anotherLocalIso8601, formatter);
+        LocalDateTime localDateTime1 = LocalDateTime.parse(localIso8601A, formatter);
+        LocalDateTime localDateTime2 = LocalDateTime.parse(localIso8601B, formatter);
         return localDateTime1.compareTo(localDateTime2);
     }
 

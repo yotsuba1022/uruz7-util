@@ -148,10 +148,38 @@ public class JdkIso8601TimeUtilTest {
         assertTrue(JdkIso8601TimeUtil.compareLocalIso8601(earlier, later) < 0);
     }
 
+    @Test
+    public void testCompareLocalIso8601ThatAreInDifferentTimeZoneAndWillGreaterThanZero() {
+        String earlier = "2017-08-08T13:45:00-10:00";
+        String later = "2017-08-08T13:46:00+07:00";
+        assertTrue(JdkIso8601TimeUtil.compareLocalIso8601(later, earlier) > 0);
+    }
+
+    @Test
+    public void testCompareLocalIso8601ThatAreInDifferentTimeZoneAndWillEqualsToZero() {
+        String earlier = "2017-08-08T13:45:00-03:00";
+        String later = "2017-08-08T13:45:00+07:00";
+        assertTrue(JdkIso8601TimeUtil.compareLocalIso8601(earlier, later) == 0);
+    }
+
+    @Test
+    public void testCompareLocalIso8601ThatAreInDifferentTimeZoneAndWillLessThanZero() {
+        String earlier = "2017-08-08T13:44:59-09:00";
+        String later = "2017-08-08T13:45:00+02:00";
+        assertTrue(JdkIso8601TimeUtil.compareLocalIso8601(earlier, later) < 0);
+    }
+
     @Test(expected = DateTimeParseException.class)
     public void testCompareLocalIso8601WithInvalidInput() {
         String invalidUnixTimestampInput = "For Shizzle My Nizzle!";
         JdkIso8601TimeUtil.compareLocalIso8601(invalidUnixTimestampInput, invalidUnixTimestampInput);
+    }
+
+    @Test(expected = DateTimeParseException.class)
+    public void testCompareLocalIso8601WithPartialInvalidInput() {
+        String invalidFormatA = "2017-08-08T13:44:59-09:00.999";
+        String invalidFormatB = "2017-08-08T13:45:00+2:00";
+        JdkIso8601TimeUtil.compareLocalIso8601(invalidFormatA, invalidFormatB);
     }
 
     @Test
