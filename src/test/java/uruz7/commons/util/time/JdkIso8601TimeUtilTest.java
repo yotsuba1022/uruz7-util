@@ -202,4 +202,22 @@ public class JdkIso8601TimeUtilTest {
         String actual = JdkIso8601TimeUtil.shiftTimeZoneForIso8601Timestamp(null);
         assertNull(actual);
     }
+
+    @Test
+    public void testIsLocatedInDefaultTimezone() {
+        String inTimezone = "2017-08-09T00:00:00+08:00";
+        String notInTimezone = "2017-08-08T16:00:00Z";
+        assertTrue(JdkIso8601TimeUtil.isLocatedInDefaultTimezone(inTimezone));
+        assertFalse(JdkIso8601TimeUtil.isLocatedInDefaultTimezone(notInTimezone));
+    }
+
+    @Test
+    public void testIsLocatedInSpecifiedTimezone() {
+        String specifiedTimezone = "-09:00";
+        String inTimezone = "2017-08-09T00:00:00-09:00";
+        String notInTimezone = "2017-08-08T16:00:00Z";
+        assertTrue(JdkIso8601TimeUtil.isLocatedInSpecifiedTimezone(inTimezone, specifiedTimezone));
+        assertFalse(JdkIso8601TimeUtil.isLocatedInSpecifiedTimezone(notInTimezone, specifiedTimezone));
+    }
+
 }

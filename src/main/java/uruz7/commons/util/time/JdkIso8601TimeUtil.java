@@ -12,6 +12,7 @@ public class JdkIso8601TimeUtil {
 
     private static final long MILLISECOND = 1000L;
     private static final ZoneId DEFAULT_ZONE_ID = ZoneId.of("Asia/Taipei");
+    private static final String DEFAULT_TIME_ZONE_SUFFIX = "+08:00";
     private static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssXXX";
     private static final String MYSQL_DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
@@ -164,6 +165,27 @@ public class JdkIso8601TimeUtil {
         LocalDateTime localDateTime1 = LocalDateTime.parse(localIso8601A, formatter);
         LocalDateTime localDateTime2 = LocalDateTime.parse(localIso8601B, formatter);
         return localDateTime1.compareTo(localDateTime2);
+    }
+
+    /**
+     * To see the timestamp is located in default timezone (UTC+8) or not.
+     *
+     * @param localIso8601 input iso8601 string
+     * @return result in boolean format
+     */
+    public static boolean isLocatedInDefaultTimezone(String localIso8601) {
+        return isLocatedInSpecifiedTimezone(localIso8601, DEFAULT_TIME_ZONE_SUFFIX);
+    }
+
+    /**
+     * To see the timestamp is located in specified timezone or not.
+     *
+     * @param localIso8601 input iso8601 string
+     * @param timezone     specified timezone
+     * @return result in boolean format
+     */
+    public static boolean isLocatedInSpecifiedTimezone(String localIso8601, String timezone) {
+        return localIso8601.endsWith(timezone);
     }
 
     private static DateTimeFormatter getDateTimeFormatter(String dateTimeFormat) {
