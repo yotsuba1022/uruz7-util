@@ -120,4 +120,10 @@ public class TimeUtilTest {
         assertFalse(TimeUtil.isTimeZoneInUtc8(input));
     }
 
+    @Test
+    public void testTimeZoneInUtc8WithEmptyInput() {
+        String emptyTimestamp = "";
+        assertFalse(TimeUtil.isTimeZoneInUtc8(emptyTimestamp));
+    }
+
 }

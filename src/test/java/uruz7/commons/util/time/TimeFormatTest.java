@@ -51,6 +51,14 @@ public class TimeFormatTest {
     }
 
     @Test
+    public void testIso8601TWTimeToIso8601UTCTime() {
+        String iso8601TWTime = "2017-07-27T23:41:00+08:00";
+        String actual = TimeFormat.convert(iso8601TWTime, TimeFormat.ISO8601TW, TimeFormat.ISO8601UTC);
+        String expected = "2017-07-27T15:41:00Z";
+        assertEquals(expected, actual);
+    }
+
+    @Test
     public void testIso8601UTCTimeToIso8601UTCTime() {
         String iso8601Time = "2017-07-27T15:41:00Z";
         String actual = TimeFormat.convert(iso8601Time, TimeFormat.ISO8601UTC, TimeFormat.ISO8601UTC);
