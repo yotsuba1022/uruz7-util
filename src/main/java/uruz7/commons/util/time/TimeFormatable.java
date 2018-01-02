@@ -3,7 +3,7 @@ package uruz7.commons.util.time;
 import java.time.Instant;
 
 /**
- * @author Carl Lu
+ * @author Emily Hsieh, Carl Lu
  */
 public interface TimeFormatable {
 
